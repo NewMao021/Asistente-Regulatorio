@@ -6,11 +6,11 @@ import json
 # 1. Configuración de la página web
 st.set_page_config(page_title="Asistente Corporativo Inteligente", page_icon="🤖", layout="centered")
 
-# Configurar la API Key de Gemini desde los secretos seguros del servidor
-if "GEMINI_API_KEY" in st.secrets:
-    api_key = st.secrets["GEMINI_API_KEY"]
+# Configurar la API Key de Cohere desde los secretos seguros del servidor
+if "COHERE_API_KEY" in st.secrets:
+    cohere_key = st.secrets["COHERE_API_KEY"]
 else:
-    st.error("Falta la configuración de GEMINI_API_KEY en los secretos del servidor.")
+    st.error("Falta la configuración de COHERE_API_KEY en los secretos del servidor.")
     st.stop()
 
 # 2. Configuración de la base de datos (Google Sheets)
@@ -55,7 +55,7 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
             # Obtener la información del Excel actualizado
             datos_empresa = obtener_datos_contexto()
             
-            # Diseñar el prompt del sistema instructivo
+            # Diseñar el prompt del sistema instructivo (Inyectado en el preámbulo de Cohere)
             prompt_sistema = (
                 "Eres el asistente virtual oficial de la empresa. Tu deber es responder preguntas de clientes o "
                 "empleados basándote única y exclusivamente en los siguientes datos actuales extraídos de nuestro "
@@ -68,35 +68,30 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
                 "3. Responde siempre en el mismo idioma en el que te hablan."
             )
             
-            # Conexión directa por HTTP usando la versión Pro avanzada de última generación
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
-            headers = {"Content-Type": "application/json"}
+            # --- CONEXIÓN DIRECTA CON COHERE API ---
+            url = "https://api.cohere.com/v1/chat"
             
-            # Estructura JSON explícita exigida por los servidores de Google
+            headers = {
+                "Authorization": f"Bearer {cohere_key}",
+                "Content-Type": "application/json",
+                "accept": "application/json"
+            }
+            
             payload = {
-                "contents": [
-                    {
-                        "role": "user",
-                        "parts": [
-                            {"text": f"{prompt_sistema}\n\nPregunta del usuario: {user_query}"}
-                        ]
-                    }
-                ],
-                "generationConfig": {
-                    "temperature": 0.2,
-                    "topP": 0.95
-                }
+                "message": user_query,
+                "preamble": prompt_sistema,   # Contexto del Excel
+                "model": "command-r-plus"      # Modelo corporativo avanzado
             }
             
             try:
                 response = requests.post(url, headers=headers, data=json.dumps(payload))
                 if response.status_code == 200:
                     response_data = response.json()
-                    output_text = response_data["candidates"][0]["content"]["parts"][0]["text"]
+                    output_text = response_data["text"]
                     
                     st.markdown(output_text)
                     st.session_state.messages.append({"role": "assistant", "content": output_text})
                 else:
-                    st.error(f"Error de la API de Google (Código {response.status_code}): {response.text}")
+                    st.error(f"Error de la API de Cohere (Código {response.status_code}): {response.text}")
             except Exception as e:
-                st.error(f"Ocurrió un inconveniente al procesar la comunicación directa: {str(e)}")
+                st.error(f"Ocurrió un inconveniente al procesar la comunicación: {str(e)}")
