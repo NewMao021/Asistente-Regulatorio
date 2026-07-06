@@ -27,7 +27,7 @@ def obtener_datos_contexto():
                         contexto_lista.append(" | ".join(elementos_fila))
                 return "\n".join(contexto_lista)
         except Exception as e:
-        return f"Error al cargar los datos del Excel: {str(e)}"
+                return f"Error al cargar los datos del Excel: {str(e)}"
 
 # Interfaz Gráfica de Usuario (UI)
 st.title(" Asistente de IA Empresarial")
