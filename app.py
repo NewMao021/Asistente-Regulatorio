@@ -71,13 +71,22 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
             # Conexión directa por HTTP (Evita errores de librerías obsoletas)
             url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
             headers = {"Content-Type": "application/json"}
+            
+            # Estructura de contenido explícita con rol de usuario exigida por v1beta
             payload = {
                 "contents": [
                     {
-                        "parts": [{"text": f"{prompt_sistema}\n\nPregunta del usuario: {user_query}"}]
+                        "role": "user",
+                        "parts": [
+                            {"text": f"{prompt_sistema}\n\nPregunta del usuario: {user_query}"}
+                        ]
                     }
-                ]
-            }
+                ],
+                "generationConfig": {
+                    "temperature": 0.2,
+                    "topP": 0.95
+                }
+            ]
             
             try:
                 response = requests.post(url, headers=headers, data=json.dumps(payload))
