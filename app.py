@@ -69,7 +69,7 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
             )
             
             # Conexión directa por HTTP (Evita errores de librerías obsoletas)
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={api_key}"
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
             headers = {"Content-Type": "application/json"}
             payload = {
                 "contents": [
