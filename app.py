@@ -69,7 +69,7 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
             )
             
             # Conexión directa por HTTP usando la versión Pro avanzada de última generación
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flashexp:generateContent?key={api_key}"
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={api_key}"
             headers = {"Content-Type": "application/json"}
             
             # Estructura JSON explícita exigida por los servidores de Google
