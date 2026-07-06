@@ -70,7 +70,7 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
                 "3. Responde siempre en el mismo idioma en el que te hablan."
             )
             try:
-                model = genai.GenerativeModel('text-bison-001')
+                model = genai.GenerativeModel('chat-bison-001')
                 # --- CORRECCIÓN 4: Se unificó el salto de línea roto en el texto del prompt ---
                 response = model.generate_content(f"{prompt_sistema}\n\nPregunta del usuario: {user_query}")
                 output_text = response.text
