@@ -18,16 +18,16 @@ SHEET_ID = "TU_ID_DE_GOOGLE_SHEETS_AQUI"
 MAP_URL = f"https://docs.google.com/spreadsheets/d/1zCqf7ohMD2ouAfqMLoTBw8KuUozZGEHd/edit?usp=sharing&ouid=104102898909584967023&rtpof=true&sd=true"
 @st.cache_data(ttl=300) # Guarda en caché los datos por 5 minutos para ahorrar ancho de banda
 def obtener_datos_contexto():
-try:
-df = pd.read_csv(MAP_URL)
-# Convertimos las filas del Excel a un formato de texto legible para la IA
-contexto_lista = []
-for index, row in df.iterrows():
-elementos_fila = [f"{col}: {val}" for col, val in row.items() if pd.notna(val)]
-contexto_lista.append(" | ".join(elementos_fila))
-return "\n".join(contexto_lista)
-except Exception as e:
-return f"Error al cargar los datos del Excel: {str(e)}"
+        try:
+                df = pd.read_csv(MAP_URL)
+                # Convertimos las filas del Excel a un formato de texto legible para la IA
+                contexto_lista = []
+                for index, row in df.iterrows():
+                        elementos_fila = [f"{col}: {val}" for col, val in row.items() if pd.notna(val)]
+                        contexto_lista.append(" | ".join(elementos_fila))
+                return "\n".join(contexto_lista)
+        except Exception as e:
+        return f"Error al cargar los datos del Excel: {str(e)}"
 
 # Interfaz Gráfica de Usuario (UI)
 st.title(" Asistente de IA Empresarial")
