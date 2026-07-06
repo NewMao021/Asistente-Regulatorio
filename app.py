@@ -7,10 +7,10 @@ layout="centered")
 
 # Configurar la API Key de Gemini desde los secretos seguros del servidor
 if "GEMINI_API_KEY" in st.secrets:
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+        genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
 else:
-st.error("Falta la configuración de GEMINI_API_KEY en los secretos del servidor.")
-st.stop()
+        st.error("Falta la configuración de GEMINI_API_KEY en los secretos del servidor.")
+        st.stop()
 
 # URL de tu Google Sheets (Reemplazar con tu ID real de documento)
 # El sufijo /export?format=csv fuerza la descarga directa del contenido actualizado
