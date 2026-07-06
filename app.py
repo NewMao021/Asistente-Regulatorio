@@ -1,8 +1,14 @@
-# Generar respuesta de la IA
+# Capturar consulta del usuario (Alineado completamente a la izquierda)
+if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
+    st.session_state.messages.append({"role": "user", "content": user_query})
+    with st.chat_message("user"):
+        st.markdown(user_query)
+
+    # Generar respuesta de la IA (4 espacios de sangría)
     with st.chat_message("assistant"):
         with st.spinner("Buscando en la base de datos..."):
             
-            # 1. Obtener la información del Excel actualizado
+            # 1. Obtener la información del Excel actualizado (12 espacios de sangría)
             datos_empresa = obtener_datos_contexto()
             
             # 2. Diseñar el prompt del sistema instructivo
@@ -18,19 +24,17 @@
                 "3. Responde siempre en el mismo idioma en el que te hablan."
             )
             
-            # --- SOLUCIÓN CONEXIÓN DIRECTA POR HTTP (OPCIÓN 3) ---
+            # --- CONEXIÓN DIRECTA POR HTTP (OPCIÓN 3) ---
             import requests
             import json
 
             api_key = st.secrets["GEMINI_API_KEY"]
-            # Usamos el endpoint oficial y moderno v1 con el modelo estable
             url = f"https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key={api_key}"
             
             headers = {
                 "Content-Type": "application/json"
             }
             
-            # Estructuramos el JSON exacto que pide la API de Google
             payload = {
                 "contents": [
                     {
@@ -42,15 +46,12 @@
             }
             
             try:
-                # Realizamos la petición web directa
                 response = requests.post(url, headers=headers, data=json.dumps(payload))
                 
                 if response.status_code == 200:
                     response_data = response.json()
-                    # Extraemos el texto de la respuesta de la estructura de Google
                     output_text = response_data["candidates"][0]["content"]["parts"][0]["text"]
                     
-                    # Mostramos en pantalla y guardamos en historial
                     st.markdown(output_text)
                     st.session_state.messages.append({"role": "assistant", "content": output_text})
                 else:
@@ -58,3 +59,4 @@
                     
             except Exception as e:
                 st.error(f"Ocurrió un inconveniente al procesar la comunicación directa: {str(e)}")
+                
