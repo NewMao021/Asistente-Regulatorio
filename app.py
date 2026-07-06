@@ -68,8 +68,8 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
                 "3. Responde siempre en el mismo idioma en el que te hablan."
             )
             
-            # Conexión directa por HTTP estructurada para el endpoint v1beta con Gemini 2.5 Flash
-            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
+            # Conexión directa por HTTP usando la versión Pro avanzada de última generación
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key={api_key}"
             headers = {"Content-Type": "application/json"}
             
             # Estructura JSON explícita exigida por los servidores de Google
