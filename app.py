@@ -80,7 +80,7 @@ if user_query := st.chat_input("¿En qué puedo ayudarte hoy?"):
             payload = {
                 "message": user_query,
                 "preamble": prompt_sistema,   # Contexto del Excel
-                "model": "command-r-plus"      # Modelo corporativo avanzado
+                "model": "command-r"      # Modelo corporativo avanzado
             }
             
             try:
